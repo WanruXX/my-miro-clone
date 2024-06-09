@@ -15,10 +15,9 @@ export const NewButton = () => {
                         <Plus className="text-white" />
                     </button>
                     </Hint>
-                    
                 </div>
             </DialogTrigger>
-            <DialogContent className="p-0 bg-transparent border-none max-w-[420px]">
+            <DialogContent className="p-0 bg-transparent border-none max-w-[430px]">
                 <CreateOrganization />
             </DialogContent>
         </Dialog>
