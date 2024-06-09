@@ -6,6 +6,7 @@ import { AuthLoading, Authenticated, Unauthenticated, ConvexReactClient } from "
 import { use } from "react";
 import { Loading } from "@/components/auth/loading";
 import { SignInButton, UserButton } from "@clerk/clerk-react";
+import { Button } from "@/components/ui/button";
 
 interface ConvexClientProviderProps {
     children: React.ReactNode;
@@ -22,7 +23,11 @@ export const ConvexClientProvider = ({
         <ClerkProvider publishableKey="pk_test_dXNlZnVsLW9hcmZpc2gtNzIuY2xlcmsuYWNjb3VudHMuZGV2JA">
             <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
                 <Unauthenticated>
-                    <SignInButton />
+                    <div className="h-full w-full flex flex-col justify-center items-center">
+                    <SignInButton>
+                        <Button >Sign in</Button>
+                    </SignInButton>
+                    </div>
                 </Unauthenticated>
                 <Authenticated>
                     {children}
