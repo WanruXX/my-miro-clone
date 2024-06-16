@@ -3,9 +3,8 @@
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { AuthLoading, Authenticated, Unauthenticated, ConvexReactClient } from "convex/react";
-import { use } from "react";
 import { Loading } from "@/components/auth/loading";
-import { SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignInButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 
 interface ConvexClientProviderProps {
