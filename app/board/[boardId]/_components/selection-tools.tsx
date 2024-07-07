@@ -19,13 +19,6 @@ export const SelectionTools = memo(({
     camera,
     setLastUsedColor,
 }: SelectionToolsProps) => {
-    const selectionBounds = useSelectionBounds();
-    if (!selectionBounds) {
-        return null;
-    }
-    const x = selectionBounds.width / 2 + selectionBounds.x + camera.x;
-    const y = selectionBounds.y + camera.y;
-
     const selection = useSelf((me) => me.presence.selection);
 
     const setFill = useMutation((
@@ -75,6 +68,12 @@ export const SelectionTools = memo(({
         }
     }, [selection]);
 
+    const selectionBounds = useSelectionBounds();
+    if (!selectionBounds) {
+        return null;
+    }
+    const x = selectionBounds.width / 2 + selectionBounds.x + camera.x;
+    const y = selectionBounds.y + camera.y;
 
     return (
         <div
