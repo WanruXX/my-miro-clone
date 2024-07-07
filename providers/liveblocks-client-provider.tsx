@@ -11,6 +11,7 @@ export const LiveblocksClientProvider = ({
 }: LiveblocksProviderProps) => {
     return (
         <LiveblocksProvider
+            throttle={16}
             authEndpoint="/api/liveblocks-auth"
         >
             {children}
