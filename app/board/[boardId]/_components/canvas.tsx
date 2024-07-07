@@ -3,11 +3,11 @@
 import { Info } from "./info";
 import { Participants } from "./participants";
 import { Toolbar } from "./toolbar";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Camera, CanvasMode, CanvasState, Color, LayerType, Point } from "@/types/canvas";
-import { useHistory, useCanUndo, useCanRedo, useMutation, useStorage } from "@liveblocks/react/suspense";
+import { useHistory, useCanUndo, useCanRedo, useMutation, useStorage, useOthersMapped } from "@liveblocks/react/suspense";
 import { CursorsPresence } from "./cursors-presence";
-import { pointerEventToCanvasPoint } from "@/lib/utils";
+import { connectionIdToColor, pointerEventToCanvasPoint } from "@/lib/utils";
 import { nanoid } from "nanoid";
 import { LiveObject } from "@liveblocks/client";
 import { LayerPreview } from "./layer-preview";
@@ -103,6 +103,40 @@ export const Canvas = ({
             insertLayer,
         ]);
 
+    const selections = useOthersMapped((other) => other.presence.selection);
+
+    const layerIdsToColorSlection = useMemo(() => {
+        const layerIdsToColorSlection: Record<string, string> = {};
+        for (const user of selections) {
+            const [connectionId, selection] = user;
+            for (const layerId of selection) {
+                layerIdsToColorSlection[layerId] = connectionIdToColor(connectionId);
+            }
+        }
+        return layerIdsToColorSlection;
+    }, [selections]);
+
+    const onLayerPointerDown = useMutation((
+        { self, setMyPresence },
+        e: React.PointerEvent,
+        layerId: string,
+    ) => {
+        if (canvasState.mode === CanvasMode.Pencil || canvasState.mode === CanvasMode.Inserting) {
+            return;
+        }
+        history.pause();
+        e.stopPropagation();
+        const point = pointerEventToCanvasPoint(e, camera);
+        if (!self.presence.selection.includes(layerId)) {
+            setMyPresence({ selection: [layerId] }, { addToHistory: true });
+        }
+        setCanvasState({ mode: CanvasMode.Translating, current: point });
+    }, [setCanvasState,
+        camera,
+        history,
+        canvasState.mode,
+    ]);
+
     return (
         <main className="h-full w-full relative bg-neutral-100 touch-none">
             <Info boardId={boardId} />
@@ -114,14 +148,18 @@ export const Canvas = ({
                 canUndo={canUndo}
                 undo={history.undo}
                 redo={history.redo} />
-            <svg className="h-[100vh] w-[100vw]" onWheel={onWheel} onPointerMove={onPointerMove} onPointerLeave={onPointetLeave} onPointerUp={onPointUp}>
+            <svg className="h-[100vh] w-[100vw]"
+                onWheel={onWheel}
+                onPointerMove={onPointerMove}
+                onPointerLeave={onPointetLeave}
+                onPointerUp={onPointUp}>
                 <g style={{ transform: `translate(${camera.x}px, ${camera.y}px)` }}>
                     {layerIds.map((layerId) => (
                         <LayerPreview
                             key={layerId}
                             id={layerId}
-                            onLayerPointerDown={() => { }}
-                            selectionColor="#000" />
+                            onLayerPointerDown={onLayerPointerDown}
+                            selectionColor={layerIdsToColorSlection[layerId]} />
                     ))}
                     <CursorsPresence />
                 </g>
