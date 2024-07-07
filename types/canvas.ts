@@ -4,9 +4,21 @@ export type Color = {
     b: number;
 };
 
+export type Point = {
+    x: number;
+    y: number;
+};
+
 export type Camera = {
     x: number;
     y: number;
+};
+
+export type XYHW = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
 };
 
 export enum LayerType {
@@ -66,18 +78,6 @@ export type NoteLayer = {
     width: number;
     fill: Color;
     value?: number;
-};
-
-export type Point = {
-    x: number;
-    y: number;
-};
-
-export type XYHW = {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
 };
 
 export enum Side {
