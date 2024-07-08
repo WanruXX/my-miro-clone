@@ -36,7 +36,7 @@ export type RectangleLayer = {
     height: number;
     width: number;
     fill: Color;
-    value?: number;
+    value?: string;
 };
 
 export type EllipseLayer = {
@@ -46,7 +46,7 @@ export type EllipseLayer = {
     height: number;
     width: number;
     fill: Color;
-    value?: number;
+    value?: string;
 };
 
 export type PathLayer = {
@@ -57,7 +57,7 @@ export type PathLayer = {
     width: number;
     fill: Color;
     points: number[][];
-    value?: number;
+    value?: string;
 };
 
 export type TextLayer = {
@@ -67,7 +67,7 @@ export type TextLayer = {
     height: number;
     width: number;
     fill: Color;
-    value?: number;
+    value?: string;
 };
 
 export type NoteLayer = {
@@ -77,7 +77,7 @@ export type NoteLayer = {
     height: number;
     width: number;
     fill: Color;
-    value?: number;
+    value?: string;
 };
 
 export enum Side {
