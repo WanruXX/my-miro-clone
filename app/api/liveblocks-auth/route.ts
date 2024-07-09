@@ -6,14 +6,12 @@ import { auth, currentUser, Organization } from "@clerk/nextjs/server";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 const liveblocks = new Liveblocks({
-    secret: "sk_dev_DJ5MBviURytI3aGv5aCW9v8a3U6l9EAvfJ0pC2fNJPTn6Tywoptf4IetQsMmhvcS",
+    secret: process.env.LIVEBLOCKS_SECRET_KEY!,
 });
 
 export async function POST(request: Request) {
     const authorization = await auth();
     const user = await currentUser();
-
-    // console.log("AUTH_INFO", { authorization, user, });
 
     if (!authorization || !user) {
         return new Response("Unauthorized", { status: 403 });
@@ -21,8 +19,6 @@ export async function POST(request: Request) {
 
     const { room } = await request.json();
     const board = await convex.query(api.board.get, { id: room });
-
-    // console.log("AUTH_INFO", { room, board, boardOrgId: board?.orgId, userOrgId: authorization.orgId, });
 
     if (board?.orgId !== authorization.orgId) {
         return new Response("Unauthorized");

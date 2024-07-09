@@ -261,7 +261,7 @@ export const Canvas = ({
         }
 
         setCanvasState({ origin: point, mode: CanvasMode.Pressing });
-    }, [camera, canvasState]);
+    }, [camera, canvasState, startDrawing]);
 
     const onPointUp = useMutation((
         { },
